@@ -36,16 +36,24 @@
     register: check_path
 
   - fail: msg="Ho trovato {{ path|default('path4')}} all'interno del file  {{ script }}. Rilancia il playbook con un parametro path differente"
-     when: check_path.rc == 0
+    when: check_path.rc == 0
 
 # esegui l'inserimento all'interno del file
+ 
+  - lineinfile:
+     backup: true
+     path: "{{ script}}"
+     line: "{{ item }}"
+     insertafter: 'path[1-9]='
+    with_items:
+    - "{{ path|default('path4') }}={{ path_log_form }}"
+
   - lineinfile:
      backup: true
      path: "{{ script}}"
      line: "{{ item }}"
     with_items:
-    - "{{ path|default('path4') }}={{ path_log_form }}"
-    - "nice -19 find ${ {{ path|default('path4') }} } -maxdepth 1 -mtime +${HISTORY} -name "FormConfigurator.log_2*" -exec rm -f {} \;"
+    - "nice -19 find ${{ path|default('path4') }} -maxdepth 1 -mtime +${HISTORY} -name \"FormConfigurator.log_2*\" -exec rm -f {} \\;"
 
   when:
   - presenza_file.stat.exists
