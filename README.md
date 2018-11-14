@@ -6,6 +6,8 @@ Se non esiste aggiunge una nuova entry path4.
 
 Se esiste già la entry path4 non prosegue ma avvisa l'operatore di rilanciare il playbook con una variabile
 
+.
+
 
 Requisiti
 ------------
